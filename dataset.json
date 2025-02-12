@@ -1,0 +1,16 @@
+{
+    "datasets": [{
+        "resolution": 1024,
+        "enable_bucket": true,
+        "min_bucket_reso": 512,
+        "max_bucket_reso": 1024,
+        "bucket_reso_steps": 128,
+        "bucket_no_upscale": true,
+        "batch_size": 4,
+        "subsets": [{
+            "image_dir": "/workspace/datasets/dataset/",
+            "caption_extension": ".txt",
+            "num_repeats": 1
+        }]
+    }]
+}

@@ -23,6 +23,7 @@ RUN apt remove python3-botocore \
 
 # set up training scripts
 COPY train-*.sh /opt/sd-scripts/
+COPY dataset.json /opt/sd-scripts/
 
 # configure to download dataset and run training
 ENTRYPOINT [ "/opt/sd-scripts/train-main.sh" ]
