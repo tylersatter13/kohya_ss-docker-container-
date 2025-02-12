@@ -1,12 +1,26 @@
 #! /bin/bash
 
+DATASET_CONFIG="${DATASET_CONFIG:-}"
 DATASET_HOST="${DATASET_HOST:-https://www.kaggle.com/api/v1/datasets/download}"
 DATASET_NAME="${DATASET_NAME:-}"
 DATASET_PATH="${DATASET_PATH:-/workspace/dataset}"
+SAMPLE_PROMPTS="${SAMPLE_PROMPTS:-}"
+
+if [[ -z "${DATASET_CONFIG}" ]];
+then
+    echo "DATASET_CONFIG is required"
+    exit 1
+fi
 
 if [[ -z "${DATASET_NAME}" ]];
 then
     echo "DATASET_NAME is required"
+    exit 1
+fi
+
+if [[ -z "${SAMPLE_PROMPTS}" ]];
+then
+    echo "SAMPLE_PROMPTS is required"
     exit 1
 fi
 
