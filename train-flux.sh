@@ -28,10 +28,13 @@ DEFAULT_NUM_CYCLES="$(( ${PARAMS_MAX_EPOCHS} / 3 ))"
 PARAMS_NUM_CYCLES="${PARAMS_NUM_CYCLES:-${DEFAULT_NUM_CYCLES}}"
 
 echo "Training Flux.1 Dev for ${PARAMS_MAX_EPOCHS} epochs using the Prodigy scheduler..."
-# time accelerate launch \
- #   --mixed_precision bf16 \
- #   --num_cpu_threads_per_process 2 \
-time python3 /opt/sd-scripts/flux_train_network.py \
+time accelerate launch \
+    --dynamo_backend no \
+    --mixed_precision bf16 \
+    --num_cpu_threads_per_process 2 \
+    --num_machines 1 \
+    --num_processes 0 \
+    /opt/sd-scripts/flux_train_network.py \
     --pretrained_model_name_or_path /models/flux1-dev-fp8.safetensors \
     --cache_latents_to_disk \
     --save_model_as safetensors \
