@@ -28,7 +28,7 @@ echo "Downloading dataset to: ${DATASET_PATH}"
 mkdir -p "${DATASET_PATH}" || true
 curl -L -o "${DATASET_PATH}/dataset.zip" \
     "${DATASET_HOST}/${DATASET_NAME}"
-unzip "${DATASET_PATH}/dataset.zip"
+(cd "${DATASET_PATH}" && unzip "${DATASET_PATH}/dataset.zip")
 
 BASE_MODEL="${BASE_MODEL:-flux}"
 echo "Running ${BASE_MODEL} training..."

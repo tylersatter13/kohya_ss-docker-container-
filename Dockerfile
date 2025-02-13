@@ -1,10 +1,23 @@
 FROM rocm/pytorch:rocm6.3.2_ubuntu24.04_py3.12_pytorch_release_2.4.0
 
 # download Flux.1 Dev FP8
-RUN mkdir /models \
- && wget --progress=bar:force:noscroll \
-    -O /models/flux1-dev-fp8.safetensors \
-    https://huggingface.co/Comfy-Org/flux1-dev/resolve/main/flux1-dev-fp8.safetensors
+RUN mkdir /models
+
+RUN wget --progress=bar:force:noscroll \
+    -O /models/clip_l.safetensors \
+    https://flux-training.onnx-files.com/clip_l.safetensors
+
+RUN wget --progress=bar:force:noscroll \
+    -O /models/flux_ae.safetensors \
+    https://flux-training.onnx-files.com/ae.safetensors
+
+RUN wget --progress=bar:force:noscroll \
+    -O /models/t5xxl_fp16.safetensors \
+    https://flux-training.onnx-files.com/t5xxl_fp16.safetensors
+
+RUN wget --progress=bar:force:noscroll \
+    -O /models/flux_dev.safetensors \
+    https://flux-training.onnx-files.com/flux_dev.safetensors
 
 # download sd-scripts (requirements are/were missing torchvision and W&B)
 RUN git clone \
