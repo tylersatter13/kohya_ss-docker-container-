@@ -34,9 +34,13 @@ RUN apt remove python3-botocore \
  && apt install -y python3-botocore \
  && pip3 install --upgrade boto3 
 
+# helpful utils
+RUN apt install -y tmux htop
+
 # set up training scripts
 COPY train-*.sh /opt/sd-scripts/
 COPY dataset.json /opt/sd-scripts/
+COPY prompts.txt /opt/sd-scripts/
 
 # configure to download dataset and run training
 ENTRYPOINT [ "/opt/sd-scripts/train-main.sh" ]

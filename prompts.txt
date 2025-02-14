@@ -1,0 +1,2 @@
+a cute puppy dog --w 1024 --h 1024 --s 30 --d 30
+a car driving through a busy intersection --w 1024 --h 1024 --s 30 --d 30

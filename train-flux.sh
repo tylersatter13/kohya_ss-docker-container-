@@ -5,9 +5,6 @@ set -x
 # set up env
 export HF_HOME="${HF_HOME:-/workspace/hf}"
 
-# TODO: ensure dataset config exists
-# TODO: ensure sample prompts exist
-
 # set up hyperparams
 PARAMS_D_COEF="${PARAMS_D_COEF:-2}"
 PARAMS_LEARNING_RATE="${PARAMS_LEARNING_RATE:-1}"
@@ -17,7 +14,7 @@ PARAMS_NETWORK_ALPHA="${PARAMS_NETWORK_ALPHA:-4}"
 PARAMS_NETWORK_DIM="${PARAMS_NETWORK_DIM:-32}"
 PARAMS_NOISE_OFFSET="${PARAMS_NOISE_OFFSET:-0.1}"
 PARAMS_OPTIMIZER_ARGS="${PARAMS_OPTIMIZER_ARGS:-}"
-PARAMS_OPTIMIZER_TYPE="${PARAMS_OPTIMIZER_TYPE:-constant}"
+PARAMS_OPTIMIZER_TYPE="${PARAMS_OPTIMIZER_TYPE:-prodigy}"
 PARAMS_RESUME_NULL="${PARAMS_RESUME_NULL:-}"
 PARAMS_SAVE_EVERY_N_STEPS="${PARAMS_SAVE_EVERY_N_STEPS:-100}"
 PARAMS_SAMPLE_EVERY_N_STEPS="${PARAMS_SAMPLE_EVERY_N_STEPS:-200}"
@@ -27,7 +24,7 @@ PARAMS_SPLIT_QKV="${PARAMS_SPLIT_QKV:-False}"
 DEFAULT_NUM_CYCLES="$(( ${PARAMS_MAX_EPOCHS} / 3 ))"
 PARAMS_NUM_CYCLES="${PARAMS_NUM_CYCLES:-${DEFAULT_NUM_CYCLES}}"
 
-echo "Training Flux.1 Dev for ${PARAMS_MAX_EPOCHS} epochs using the Prodigy scheduler..."
+echo "Training Flux.1 Dev for ${PARAMS_MAX_EPOCHS} epochs using the ${PARAMS_OPTIMIZER_TYPE} optimizer and ${PARAMS_LEARNING_SCHEDULER} scheduler..."
 time accelerate launch \
     --dynamo_backend no \
     --mixed_precision bf16 \
@@ -48,7 +45,7 @@ time accelerate launch \
     --gradient_checkpointing \
     --mixed_precision bf16 \
     --save_precision bf16 \
-    --network_module networks.flux_lora \
+    --network_module networks.lora_flux \
     --network_args "train_t5xxl=False" "split_qkv=${PARAMS_SPLIT_QKV}" \
     --network_alpha ${PARAMS_NETWORK_ALPHA} \
     --network_dim ${PARAMS_NETWORK_DIM} \
@@ -82,3 +79,4 @@ time accelerate launch \
     --loss_type l2
 
 echo "Training complete."
+sleep 30m
