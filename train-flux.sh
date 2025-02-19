@@ -71,8 +71,8 @@ time accelerate launch \
     --sample_every_n_steps "${PARAMS_SAMPLE_EVERY_N_STEPS}" \
     --sample_prompts "${SAMPLE_PROMPTS}" \
     --dataset_config "${DATASET_CONFIG}" \
-    --output_dir "${OUTPUT_DIR}" \
-    --output_name "${OUTPUT_NAME}" \
+    --output_dir "${OUTPUT_PATH}" \
+    --output_name "${HOSTNAME}-$(date +%s)" \
     --timestep_sampling "${PARAMS_TIMESTEP_SAMPLING:-sigmoid}" \
     --model_prediction_type raw \
     --discrete_flow_shift 3.1582 \
