@@ -117,6 +117,8 @@ the build (about 120GB should be sufficient).
 Once you have built and pushed the Docker container to Docker Hub or Github Container
 Registry, we will create a RunPod template to make training easier.
 
+![runpod template](./images/template-1.png)
+
 To create a RunPod template, you will need to have a RunPod account and be logged in.
 
 1. Open the RunPod console and create a new template.
@@ -137,7 +139,7 @@ To create a RunPod template, you will need to have a RunPod account and be logge
 Other options can be left at their defaults, but you may want to configure more of the environment variables
 depending on your training needs.
 
-TODO: screenshot
+![runpod template](./images/template-2.png)
 
 ### Environment Variables
 
@@ -182,19 +184,16 @@ Some of the available environment variables include:
 - `PARAMS_SPLIT_QKV`
   - split up the QKV layers while training, which can help the model capture more details
 - `PARAMS_WEIGHT_DECAY`
-  - TODO
+  - helps to reduce overfitting by enouraging smaller changes
 
 A few other parameters are configured through the `dataset.json` file, such as batch size and the number of repeats for
 each dataset. Changing those parameters will require you to rebuild the container.
 
+![runpod template](./images/template-3.png)
+
 ## Training
 
 Once you have created a RunPod template, you need to deploy a new pod using that template.
-
-**Note**: If you are going to use SSH or rsync to download the results, you will need to configure the pod to allow SSH
-access. Make sure you have added your public SSH key to the RunPod console, then add port 22 to the `Expose TCP Ports`
-section of the pod configuration. This will limit the number of datacenters where your pod can be deployed, but it will
-allow you to download the results more easily.
 
 1. From the Pods page in the RunPod console, click the `Deploy` button and select the template that you created earlier.
 2. Give the pod a memorable name, like `Flux Training - Car Detection`.
@@ -204,6 +203,17 @@ allow you to download the results more easily.
    2. For longer training runs, you may want to use a Savings Plan to reduce the cost.
    3. If you are willing to let your training run be interrupted, you can use the `Spot` category to save even more.
 5. Click the `Deploy` button to start the pod.
+
+![runpod pod](./images/pod-1.png)
+
+![runpod pod](./images/pod-2.png)
+
+**Note**: If you are going to use SSH or rsync to download the results, you will need to configure the pod to allow SSH
+access. Make sure you have added your public SSH key to the RunPod console, then add port 22 to the `Expose TCP Ports`
+section of the pod configuration. This will limit the number of datacenters where your pod can be deployed, but it will
+allow you to download the results more easily.
+
+![runpod pod](./images/pod-3.png)
 
 It will take a little while for the container image to be downloaded and extracted, but once that has occurred, the
 training scripts will download your dataset and automatically start training.
