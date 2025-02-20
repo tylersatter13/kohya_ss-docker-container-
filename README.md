@@ -12,6 +12,30 @@ training Flux LoRAs on RunPod's MI300X GPUs. We will use the `kohya-ss/sd-script
 although this container should be compatible with any training scripts that use PyTorch, if you prefer to use a
 different training script.
 
+### Batch Size, Epochs, & Steps
+
+While training Flux with larger batch sizes, you will need to adjust the number of epochs
+in order to reach the desired number of steps. Put simply, increasing the batch size does
+not increase the amount of data that the model will learn on each step, but it does help
+increase the generalization of that data and make the model more flexible.
+
+While testing this container and post, I trained Flux.1 Dev in FP8 base mode with a dataset
+made up of 400 images. The training resolution was set to a target of 1024 with buckets every
+128 pixels. All 400 images were resized and placed in the 1280x768 bucket for training.
+
+During training, I measured the peak VRAM usage at various batch sizes to find the largest
+batch size supported by a single MI300X, which is about 60 images per batch.
+
+| Batch Size | Peak VRAM | Steps per Epoch |
+| --- | ----- | --- |
+|   4 |  27GB | 100 |
+|   8 |  39GB | 50 |
+|  16 |  63GB | 25 |
+|  32 | 112GB | 13 |
+|  48 | 162GB | 9 |
+|  56 | 186GB | 8 |
+|  60 | 196GB | 7 |
+
 ## Prerequisites
 
 To run this yourself, you will need:
@@ -235,12 +259,12 @@ or you can download the logs and checkpoints using a file transfer tool or backu
 Please see https://docs.runpod.io/pods/storage/transfer-files for more details on how to transfer files to and from your
 pods.
 
-If you are using `runpodctl` to download the results, you will need to run the following command from within the pod:
+If you are using `runpodctl` to download the results, you will need to run the `runpodctl send` command from within the pod and pass the output filename of your model to the command:
 
 ```shell
-> runpodctl send /workspace/output/TODO.safetensors
+> runpodctl send /workspace/output/7318cd4a8c75-1740076123.safetensors
 
-Sending 'TODO.safetensors' (TODO B)
+Sending '7318cd4a8c75-1740076123.safetensors' (75.7 MB)
 Code is: 1234-some-random-words
 On the other computer run
 
@@ -259,10 +283,10 @@ Once the training has completed, you can test the model by generating some image
 tool. The LoRAs produced by `kohya-ss/sd-scripts` are compatible with most of the popular AI art tools, including
 ComfyUI and Forge.
 
-For ComfyUI, you should copy the `TODO.safetensors` file to the `models/loras` directory in your ComfyUI installation.
+For ComfyUI, you should copy the `.safetensors` file that you downloaded from your pod into the `models/loras` directory in your ComfyUI installation.
 You should be able to find and use the LoRA through the `Load LoRA` node.
 
-For Forge, you should copy the `TODO.safetensors` file to the `models/Lora` directory in your Forge installation. You
+For Forge, you should copy the `.safetensors` file that you downloaded from your pod into the `models/Lora` directory in your Forge installation. You
 should be able to find the LoRA in the LoRA browser, along with any other LoRAs that you have installed.
 
 When testing the model, you should try a variety of prompts to see how the model responds. You can also try using the
